@@ -3,31 +3,31 @@ using Application.Models;
 using Domain;
 
 namespace Application.Queries.GetBoard;
-internal class GetBoardQueryHandler : IRequestHandler<GetBoardQuery, IResult<BoardPlayerView>>
+internal class GetGameStateQueryHandler : IRequestHandler<GetGameStateQuery, IResult<GameStatePlayerView>>
 {
     private readonly IGameRepository _gameRepository;
-    private readonly GameToBoardPlayerViewMapper _mapper;
+    private readonly GameToGameStatePlayerViewMapper _mapper;
 
-    public GetBoardQueryHandler(
+    public GetGameStateQueryHandler(
         IGameRepository gameRepository,
-        GameToBoardPlayerViewMapper mapper)
+        GameToGameStatePlayerViewMapper mapper)
     {
         _gameRepository = gameRepository;
         _mapper = mapper;
     }
 
-    public async Task<IResult<BoardPlayerView>> Handle(GetBoardQuery request, CancellationToken cancellationToken)
+    public async Task<IResult<GameStatePlayerView>> Handle(GetGameStateQuery request, CancellationToken cancellationToken)
     {
         var game = await _gameRepository.GetGame(request.GameId, cancellationToken);
 
         if (game is null)
         {
-            return Result.Fail<BoardPlayerView>("Game not found");
+            return Result.Fail<GameStatePlayerView>("Game not found");
         }
 
         if (!game.GetHasPlayer(request.PlayerId))
         {
-            return Result.Fail<BoardPlayerView>("Player not in game");
+            return Result.Fail<GameStatePlayerView>("Player not in game");
         }
 
         var view = _mapper.Map(game, request.PlayerId);

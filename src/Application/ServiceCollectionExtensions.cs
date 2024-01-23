@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.TryAddSingleton<GameFactory>();
-        services.TryAddSingleton<GameToBoardPlayerViewMapper>();
+        services.TryAddSingleton<GameToGameStatePlayerViewMapper>();
 
         return services;
     }

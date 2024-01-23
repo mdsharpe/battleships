@@ -2,9 +2,9 @@
 using Domain.Aggregates.Game;
 
 namespace Application.Mappers;
-public class GameToBoardPlayerViewMapper
+public class GameToGameStatePlayerViewMapper
 {
-    public BoardPlayerView Map(Game game, Guid playerId)
+    public GameStatePlayerView Map(Game game, Guid playerId)
     {
         var cells = new CellState[game.Width, game.Height];
 
@@ -16,6 +16,8 @@ public class GameToBoardPlayerViewMapper
             }
         }
 
-        return new BoardPlayerView(cells);
+        var isCurrentPlayer = game.GetIsCurrentPlayer(playerId);
+
+        return new GameStatePlayerView(cells, isCurrentPlayer);
     }
 }
